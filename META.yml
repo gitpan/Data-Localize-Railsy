@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               Data-Localize-Railsy
-version:            0.01
+version:            0.02
 abstract:           Acquire Lexicons from F<.yml> files in a Rails-like format
 author:
     - Ævar Arnfjörð Bjarmason <avar@cpan.org>
@@ -13,6 +13,7 @@ build_requires:
     Test::More:           0.94
 requires:
     Data::Localize:  0.00011
+    Moose:           0.93
 resources:
     bugtracker:  http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-Localize-Railsy
     license:     http://dev.perl.org/licenses/

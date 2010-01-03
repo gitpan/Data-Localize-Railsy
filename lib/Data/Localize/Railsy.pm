@@ -1,14 +1,13 @@
 package Data::Localize::Railsy;
 use Encode ();
-use Any::Moose;
-use Any::Moose 'X::AttributeHelpers';
+use Moose;
 use File::Basename ();
 use File::Spec;
 use File::Temp qw(tempdir);
 use Data::Localize::Storage::Hash;
 use YAML::Any qw(LoadFile);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 with 'Data::Localize::Localizer';
 
@@ -20,15 +19,15 @@ has 'encoding' => (
 );
 
 has 'paths' => (
-    metaclass => 'Collection::Array',
+    traits => ['Array'],
     is => 'rw',
     isa => 'ArrayRef',
     trigger => sub {
         my $self = shift;
         $self->load_from_path($_) for @{$_[0]}
     },
-    provides => {
-        unshift => 'path_add',
+    handles => {
+        path_add => 'unshift',
     }
 );
 
@@ -52,19 +51,15 @@ has 'storage_args' => (
 );
 
 has 'lexicon_map' => (
-    metaclass => 'Collection::Hash',
+    traits => ['Hash'],
     is => 'rw',
     isa => 'HashRef[Data::Localize::Storage]',
     default => sub { +{} },
-    provides => {
-        get => 'lexicon_map_get',
-        set => 'lexicon_map_set'
+    handles => {
+        lexicon_map_get => 'get',
+        lexicon_map_set => 'set',
     }
 );
-
-__PACKAGE__->meta->make_immutable;
-
-no Any::Moose;
 
 sub BUILDARGS {
     my ($class, %args) = @_;
@@ -234,6 +229,10 @@ sub _build_storage {
         return $class->new();
     }
 }
+
+__PACKAGE__->meta->make_immutable;
+
+no Moose;
 
 1;
 
